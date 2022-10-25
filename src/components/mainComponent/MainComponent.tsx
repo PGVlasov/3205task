@@ -1,8 +1,8 @@
 import { useState } from "react";
-import classes from "./MainComponent.module.scss";
 import { fetchRate } from "../../api/api";
 import { Input } from "../../shared/Input";
-import { Loader } from "../loader/Loader";
+import { Loader } from "../loader";
+import classes from "./MainComponent.module.scss";
 
 function getCurrency(curr: string) {
   switch (curr) {
@@ -19,68 +19,70 @@ function getCurrency(curr: string) {
 
 export const MainComponent: React.FC = () => {
   const [inputValue, setInputValue] = useState<string>("");
-  const [result, setResult] = useState<number>(0);
+  const [exchangeResult, setExchangeResult] = useState<number>(0);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const [targetCurrency, setTargetCurrency] = useState<string | null>("");
+  const [targetCurrency, setTargetCurrency] = useState<string | null>(null);
 
   const calculateExchangeResult = async (inputValue: string) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [value, sourceCurrency, _, targetCurrency] = inputValue.split(" ");
 
     const numValue = Number(value);
     if (!Number.isInteger(numValue)) {
       setError(`Wrong currency value. Expected format: "15 usd in rub"`);
-      setResult(0);
+      setExchangeResult(0);
       return;
     }
 
-    const sourceCurr = getCurrency(sourceCurrency.toUpperCase());
-    const targetCurr = getCurrency(targetCurrency.toUpperCase());
+    const sourceCurr = sourceCurrency
+      ? getCurrency(sourceCurrency.toUpperCase())
+      : null;
+    const targetCurr = targetCurrency
+      ? getCurrency(targetCurrency.toUpperCase())
+      : null;
 
     if (!sourceCurr || !targetCurr) {
-      setError(`Wrong currency. Expected format: "15 usd in rub"`);
-      setResult(0);
+      setError(`Wrong or missing currency. Expected format: "15 usd in rub"`);
+      setExchangeResult(0);
       return;
     }
 
     setTargetCurrency(targetCurr);
     setIsLoading(true);
-    const rate = await fetchRate(sourceCurr, targetCurr);
-
-    setResult(numValue * Number(rate));
-    setIsLoading(false);
     setError("");
-    setInputValue("");
-  };
 
-  const onChangeValue = (value: string) => {
-    setInputValue(value);
+    let rate;
+    try {
+      rate = await fetchRate(sourceCurr, targetCurr);
+      setExchangeResult(numValue * Number(rate));
+      setInputValue("");
+    } catch (error) {
+      setError("Something went wrong");
+    } finally {
+      setIsLoading(false);
+    }
   };
-
-  if (isLoading)
-    return (
-      <div className={classes.MainComponent}>
-        <Loader />
-      </div>
-    );
 
   return (
-    <div className={classes.MainComponent}>
+    <div className={classes.mainComponent}>
       <h1>Currency converter</h1>
-      <Input
-        type="text"
-        placeholder="15 USD in RUB"
-        className={classes.input}
-        onChange={onChangeValue}
-        onKeyDown={(e: React.KeyboardEvent) =>
-          e.code === "Enter" ? calculateExchangeResult(inputValue) : null
-        }
-        value={inputValue}
-      />
+      <div className={classes.inputContainer}>
+        <Input
+          type="text"
+          placeholder="15 USD in RUB"
+          onChange={setInputValue}
+          onKeyDown={(e: React.KeyboardEvent) =>
+            e.code === "Enter" ? calculateExchangeResult(inputValue) : null
+          }
+          value={inputValue}
+        />
+        {isLoading && <Loader className={classes.loader} width={40} />}
+      </div>
       {error !== "" ? <div className={classes.error}>{error}</div> : null}
-      {result ? (
+      {exchangeResult ? (
         <div className={classes.result}>
-          {result.toFixed(2)} {targetCurrency}
+          {exchangeResult.toFixed(2)} {targetCurrency}
         </div>
       ) : null}
     </div>

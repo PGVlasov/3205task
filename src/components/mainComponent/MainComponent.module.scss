@@ -1,15 +1,29 @@
-.MainComponent {
+.mainComponent {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  width: 100vw;
+}
+
+.inputContainer {
+  position: relative;
+}
+
+.loader {
+  position: absolute;
+  top: 50%;
+  right: -50px;
+  transform: translateY(-50%);
 }
 
 .result {
+  margin-top: 20px;
   font-size: 45px;
 }
 
 .error {
-  font-size: 35px;
+  font-size: 20px;
+  margin-top: 10px;
   color: rgb(151, 61, 61);
 }

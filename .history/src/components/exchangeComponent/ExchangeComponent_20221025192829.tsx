@@ -20,7 +20,7 @@ export const ExchangeComponent: React.FC = () => {
   );
 
   if (rates === null) {
-    return <Loader width={100} />;
+    return <Loader />;
   }
 
   return (
