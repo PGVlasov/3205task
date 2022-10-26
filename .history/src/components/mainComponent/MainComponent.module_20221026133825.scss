@@ -41,11 +41,20 @@
     align-items: center;
   }
 
+  .loader {
+    top: 50%;
+    right: 50%;
+    transform: translateY(-50%);
+  }
+
   .result {
     font-size: 25px;
   }
 
   .error {
-    font-size: 15px;
+    font-size: 20px;
+    margin-top: 10px;
+    color: rgb(151, 61, 61);
+    padding-left: 30px;
   }
 }

@@ -30,19 +30,8 @@ export const MainComponent: React.FC = () => {
     const [value, sourceCurrency, _, targetCurrency] = inputValue.split(" ");
     setEnteredValue(inputValue);
     const numValue = Number(value);
-    console.log(typeof numValue);
-    if (numValue === 0) {
-      setError(`Wrong currency value. You entered 0`);
-      setExchangeResult(0);
-      return;
-    }
-    if (!Number(numValue)) {
+    if (!Number.isInteger(numValue)) {
       setError(`Wrong currency value. Expected format: "15 usd in rub"`);
-      setExchangeResult(0);
-      return;
-    }
-    if (numValue < 1) {
-      setError(`Wrong currency value. Minimum value is 1 ${sourceCurrency}`);
       setExchangeResult(0);
       return;
     }
@@ -61,7 +50,7 @@ export const MainComponent: React.FC = () => {
     }
 
     if (sourceCurr === targetCurr) {
-      setError(`Wrong currency. You used the same currency`);
+      setError(`Wrong currency. You used the same currency"`);
       setExchangeResult(0);
       return;
     }
@@ -102,10 +91,8 @@ export const MainComponent: React.FC = () => {
       {error !== "" ? <div className={classes.error}>{error}</div> : null}
       {exchangeResult ? (
         <div className={classes.result}>
-          <p className={classes.resultDescription}>{enteredValue} will be</p>
-          <p>
-            {exchangeResult.toFixed(2)} {targetCurrency}
-          </p>
+          <p>You {enteredValue} will be</p>
+          {exchangeResult.toFixed(2)} {targetCurrency}
         </div>
       ) : null}
     </div>

@@ -33,7 +33,14 @@
   padding-left: 30px;
 }
 
-@media (max-width: 400px) {
+@media (max-width: 350px) {
+  .mainComponent {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
   .inputContainer {
     display: flex;
     flex-direction: column;
@@ -41,11 +48,26 @@
     align-items: center;
   }
 
+  .loader {
+    top: 50%;
+    right: 50%;
+    transform: translateY(-50%);
+  }
+
   .result {
-    font-size: 25px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+    font-size: 45px;
+    padding-left: 30px;
   }
 
   .error {
-    font-size: 15px;
+    font-size: 20px;
+    margin-top: 10px;
+    color: rgb(151, 61, 61);
+    padding-left: 30px;
   }
 }

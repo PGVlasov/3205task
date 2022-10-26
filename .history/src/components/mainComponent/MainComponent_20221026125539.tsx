@@ -102,7 +102,7 @@ export const MainComponent: React.FC = () => {
       {error !== "" ? <div className={classes.error}>{error}</div> : null}
       {exchangeResult ? (
         <div className={classes.result}>
-          <p className={classes.resultDescription}>{enteredValue} will be</p>
+          <p>{enteredValue} will be</p>
           <p>
             {exchangeResult.toFixed(2)} {targetCurrency}
           </p>

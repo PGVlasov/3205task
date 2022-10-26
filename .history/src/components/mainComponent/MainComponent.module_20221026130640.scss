@@ -23,29 +23,16 @@
   align-items: center;
   margin-top: 20px;
   font-size: 45px;
-  padding-left: 30px;
 }
 
 .error {
   font-size: 20px;
   margin-top: 10px;
   color: rgb(151, 61, 61);
-  padding-left: 30px;
 }
 
-@media (max-width: 400px) {
-  .inputContainer {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .result {
-    font-size: 25px;
-  }
-
-  .error {
-    font-size: 15px;
+@media (max-width: 350px) {
+  .mainComponent {
+    background-color: rgb(13, 39, 61);
   }
 }

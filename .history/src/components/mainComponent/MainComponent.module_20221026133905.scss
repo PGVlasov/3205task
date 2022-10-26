@@ -41,6 +41,12 @@
     align-items: center;
   }
 
+  .loader {
+    top: 50%;
+    right: 50%;
+    transform: translateY(-50%);
+  }
+
   .result {
     font-size: 25px;
   }

@@ -23,26 +23,14 @@ export const MainComponent: React.FC = () => {
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [targetCurrency, setTargetCurrency] = useState<string | null>(null);
-  const [enteredValue, setEnteredValue] = useState("");
 
   const calculateExchangeResult = async (inputValue: string) => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [value, sourceCurrency, _, targetCurrency] = inputValue.split(" ");
-    setEnteredValue(inputValue);
+
     const numValue = Number(value);
-    console.log(typeof numValue);
-    if (numValue === 0) {
-      setError(`Wrong currency value. You entered 0`);
-      setExchangeResult(0);
-      return;
-    }
-    if (!Number(numValue)) {
+    if (!Number.isInteger(numValue)) {
       setError(`Wrong currency value. Expected format: "15 usd in rub"`);
-      setExchangeResult(0);
-      return;
-    }
-    if (numValue < 1) {
-      setError(`Wrong currency value. Minimum value is 1 ${sourceCurrency}`);
       setExchangeResult(0);
       return;
     }
@@ -60,18 +48,15 @@ export const MainComponent: React.FC = () => {
       return;
     }
 
-    if (sourceCurr === targetCurr) {
-      setError(`Wrong currency. You used the same currency`);
-      setExchangeResult(0);
-      return;
-    }
-
     setTargetCurrency(targetCurr);
     setIsLoading(true);
     setError("");
 
     let rate;
 
+    if (isLoading) {
+      setExchangeResult(0);
+    }
     try {
       rate = await fetchRate(sourceCurr, targetCurr);
       setExchangeResult(numValue * Number(rate));
@@ -102,10 +87,7 @@ export const MainComponent: React.FC = () => {
       {error !== "" ? <div className={classes.error}>{error}</div> : null}
       {exchangeResult ? (
         <div className={classes.result}>
-          <p className={classes.resultDescription}>{enteredValue} will be</p>
-          <p>
-            {exchangeResult.toFixed(2)} {targetCurrency}
-          </p>
+          {exchangeResult.toFixed(2)} {targetCurrency}
         </div>
       ) : null}
     </div>
